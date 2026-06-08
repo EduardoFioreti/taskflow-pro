@@ -8,6 +8,8 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?style=flat-square&logo=bootstrap)
 ![Deploy](https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square)
 
+🔗 **[Acesse o projeto ao vivo](https://taskflow-pro-6p1g.onrender.com)**
+
 ---
 
 ## Sobre o projeto
@@ -97,7 +99,7 @@ taskflow-pro/
 
 ## Deploy
 
-A aplicação está configurada para deploy no **Render** com PostgreSQL. As variáveis de ambiente necessárias são:
+A aplicação está em produção no **Render** com PostgreSQL. As variáveis de ambiente necessárias são:
 
 | Variável | Descrição |
 |----------|-----------|
@@ -114,3 +116,4 @@ Analista de Suporte N1/N2 & Especialista ERP — Cads Informática
 Diretor Financeiro — Seeds Tecnologia
 
 [![GitHub](https://img.shields.io/badge/GitHub-EduardoFioreti-181717?style=flat-square&logo=github)](https://github.com/EduardoFioreti)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Eduardo%20Fioreti-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/eduardofioreti)
