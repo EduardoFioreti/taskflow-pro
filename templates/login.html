@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Login — TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="col-12 col-sm-8 col-md-5 col-lg-4">
+
+    <!-- Logo / Título -->
+    <div class="text-center mb-4">
+      <h2 class="fw-bold" style="color: #1a1a2e;">
+        TaskFlow <span style="color: #00d4aa;">Pro</span>
+      </h2>
+      <p class="text-muted">Organize suas tarefas com eficiência</p>
+    </div>
+
+    <!-- Card de Login -->
+    <div class="card p-4">
+      <h5 class="mb-3 fw-semibold text-center" style="color: #1a1a2e;">Entrar na conta</h5>
+
+      <form method="POST" action="{{ url_for('login') }}">
+
+        <div class="mb-3">
+          <label class="form-label text-muted small">E-mail</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-envelope text-muted"></i>
+            </span>
+            <input
+              type="email"
+              name="email"
+              class="form-control border-start-0"
+              placeholder="seu@email.com"
+              required
+              autofocus
+            />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label text-muted small">Senha</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-lock text-muted"></i>
+            </span>
+            <input
+              type="password"
+              name="senha"
+              class="form-control border-start-0"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Link pra cadastro -->
+    <p class="text-center mt-3 text-muted small">
+      Não possui conta?
+      <a href="{{ url_for('cadastro') }}" style="color: #00d4aa; text-decoration: none; font-weight: 600;">
+        Criar conta
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+  <!-- Saudação -->
+  <div class="mb-4">
+    <h4 class="fw-bold" style="color: #1a1a2e;">
+      Olá, {{ session.get("user_nome").split()[0] }}! 👋
+    </h4>
+    <p class="text-muted mb-0">Aqui está um resumo das suas tarefas.</p>
+  </div>
+
+  <!-- Cards de contagem -->
+  <div class="row g-3 mb-4">
+
+    <!-- Total -->
+    <div class="col-6 col-md-3">
+      <div class="card p-3 text-center h-100">
+        <div class="mb-2">
+          <i class="bi bi-list-task fs-2" style="color: #6c757d;"></i>
+        </div>
+        <h2 class="fw-bold mb-0" style="color: #1a1a2e;">{{ total }}</h2>
+        <small class="text-muted">Total</small>
+      </div>
+    </div>
+
+    <!-- Pendentes -->
+    <div class="col-6 col-md-3">
+      <div class="card p-3 text-center h-100">
+        <div class="mb-2">
+          <i class="bi bi-hourglass-split fs-2" style="color: #f39c12;"></i>
+        </div>
+        <h2 class="fw-bold mb-0" style="color: #f39c12;">{{ pendentes }}</h2>
+        <small class="text-muted">Pendentes</small>
+      </div>
+    </div>
+
+    <!-- Em andamento -->
+    <div class="col-6 col-md-3">
+      <div class="card p-3 text-center h-100">
+        <div class="mb-2">
+          <i class="bi bi-arrow-repeat fs-2" style="color: #3498db;"></i>
+        </div>
+        <h2 class="fw-bold mb-0" style="color: #3498db;">{{ andamento }}</h2>
+        <small class="text-muted">Em andamento</small>
+      </div>
+    </div>
+
+    <!-- Concluídas -->
+    <div class="col-6 col-md-3">
+      <div class="card p-3 text-center h-100">
+        <div class="mb-2">
+          <i class="bi bi-check-circle fs-2" style="color: #00d4aa;"></i>
+        </div>
+        <h2 class="fw-bold mb-0" style="color: #00d4aa;">{{ concluidas }}</h2>
+        <small class="text-muted">Concluídas</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Barra de progresso -->
+  {% if total > 0 %}
+  <div class="card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="fw-semibold" style="color: #1a1a2e;">Progresso geral</span>
+      <span class="text-muted small">{{ ((concluidas / total) * 100) | round(0) | int }}% concluído</span>
+    </div>
+    <div class="progress" style="height: 10px; border-radius: 10px;">
+      <div
+        class="progress-bar"
+        role="progressbar"
+        style="width: {{ ((concluidas / total) * 100) | round(0) | int }}%; background-color: #00d4aa; border-radius: 10px;"
+      ></div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Ação rápida -->
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('tarefas') }}" class="btn btn-primary">
+      <i class="bi bi-check2-square me-1"></i> Ver tarefas
+    </a>
+    <a href="{{ url_for('nova_tarefa') }}" class="btn btn-outline-secondary">
+      <i class="bi bi-plus-circle me-1"></i> Nova tarefa
+    </a>
+  </div>
+
+</div>
+{% endblock %}

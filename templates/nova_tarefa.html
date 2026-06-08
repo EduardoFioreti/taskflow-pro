@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Nova Tarefa — TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-7 col-lg-6">
+
+      <!-- Cabeçalho -->
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <a href="{{ url_for('tarefas') }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-arrow-left"></i>
+        </a>
+        <h4 class="fw-bold mb-0" style="color: #1a1a2e;">Nova Tarefa</h4>
+      </div>
+
+      <!-- Card do formulário -->
+      <div class="card p-4">
+        <form method="POST" action="{{ url_for('nova_tarefa') }}">
+
+          <!-- Título -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Título <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              name="titulo"
+              class="form-control"
+              placeholder="Ex: Estudar Flask"
+              required
+              autofocus
+            />
+          </div>
+
+          <!-- Descrição -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Descrição <span class="text-muted">(opcional)</span></label>
+            <textarea
+              name="descricao"
+              class="form-control"
+              rows="3"
+              placeholder="Detalhes sobre a tarefa..."
+            ></textarea>
+          </div>
+
+          <!-- Categoria -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Categoria</label>
+            <select name="categoria" class="form-select">
+              <option value="geral">Geral</option>
+              <option value="pessoal">Pessoal</option>
+              <option value="trabalho">Trabalho</option>
+              <option value="estudos">Estudos</option>
+            </select>
+          </div>
+
+          <!-- Prioridade -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Prioridade</label>
+            <div class="d-flex gap-2">
+
+              <input type="radio" class="btn-check" name="prioridade" id="baixa" value="baixa" />
+              <label class="btn btn-outline-secondary btn-sm" for="baixa">
+                <i class="bi bi-arrow-down-circle me-1"></i>Baixa
+              </label>
+
+              <input type="radio" class="btn-check" name="prioridade" id="media" value="media" checked />
+              <label class="btn btn-outline-warning btn-sm" for="media">
+                <i class="bi bi-dash-circle me-1"></i>Média
+              </label>
+
+              <input type="radio" class="btn-check" name="prioridade" id="alta" value="alta" />
+              <label class="btn btn-outline-danger btn-sm" for="alta">
+                <i class="bi bi-arrow-up-circle me-1"></i>Alta
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Prazo -->
+          <div class="mb-4">
+            <label class="form-label text-muted small">Prazo <span class="text-muted">(opcional)</span></label>
+            <input
+              type="date"
+              name="prazo"
+              class="form-control"
+              min="{{ today }}"
+            />
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-grow-1 py-2">
+              <i class="bi bi-check-circle me-1"></i> Salvar tarefa
+            </button>
+            <a href="{{ url_for('tarefas') }}" class="btn btn-outline-secondary px-4">
+              Cancelar
+            </a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

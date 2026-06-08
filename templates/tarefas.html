@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}Tarefas — TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+  <!-- Cabeçalho -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0" style="color: #1a1a2e;">Minhas Tarefas</h4>
+    <a href="{{ url_for('nova_tarefa') }}" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i> Nova tarefa
+    </a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card p-3 mb-4">
+    <div class="row g-3">
+
+      <!-- Busca -->
+      <div class="col-12">
+        <form method="GET" action="{{ url_for('tarefas') }}">
+          <input type="hidden" name="filtro" value="{{ filtro }}" />
+          <input type="hidden" name="prioridade" value="{{ prioridade }}" />
+          <input type="hidden" name="ordem" value="{{ ordem }}" />
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input
+              type="text"
+              name="busca"
+              class="form-control border-start-0"
+              placeholder="Buscar tarefa..."
+              value="{{ busca }}"
+            />
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            {% if busca %}
+            <a href="{{ url_for('tarefas', filtro=filtro, prioridade=prioridade, ordem=ordem) }}" class="btn btn-outline-secondary">
+              <i class="bi bi-x"></i>
+            </a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
+      <!-- Status -->
+      <div class="col-12 col-md-4">
+        <label class="form-label text-muted small mb-1">Status</label>
+        <div class="d-flex flex-wrap gap-2">
+          {% for valor, label in [("todas","Todas"), ("pendente","Pendentes"), ("em_andamento","Em andamento"), ("concluida","Concluídas")] %}
+          <a href="{{ url_for('tarefas', filtro=valor, prioridade=prioridade, ordem=ordem, busca=busca, categoria=categoria) }}"
+            class="btn btn-sm {% if filtro == valor %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            {{ label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Prioridade -->
+      <div class="col-12 col-md-4">
+        <label class="form-label text-muted small mb-1">Prioridade</label>
+        <div class="d-flex flex-wrap gap-2">
+          {% for valor, label in [("todas","Todas"), ("alta","Alta"), ("media","Média"), ("baixa","Baixa")] %}
+          <a href="{{ url_for('tarefas', filtro=filtro, prioridade=valor, ordem=ordem, busca=busca, categoria=categoria) }}"
+            class="btn btn-sm {% if prioridade == valor %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            {{ label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Ordenação -->
+      <div class="col-12 col-md-4">
+        <label class="form-label text-muted small mb-1">Ordenar por</label>
+        <div class="d-flex flex-wrap gap-2">
+          {% for valor, label in [("recente","Recente"), ("prazo","Prazo"), ("prioridade","Prioridade")] %}
+          <a href="{{ url_for('tarefas', filtro=filtro, prioridade=prioridade, ordem=valor, busca=busca, categoria=categoria) }}"
+            class="btn btn-sm {% if ordem == valor %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            {{ label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Categoria -->
+      <div class="col-12">
+        <label class="form-label text-muted small mb-1">Categoria</label>
+        <div class="d-flex flex-wrap gap-2">
+          {% for valor, label in [("todas","Todas"), ("geral","Geral"), ("pessoal","Pessoal"), ("trabalho","Trabalho"), ("estudos","Estudos")] %}
+          <a href="{{ url_for('tarefas', filtro=filtro, prioridade=prioridade, ordem=ordem, busca=busca, categoria=valor) }}"
+            class="btn btn-sm {% if categoria == valor %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            {{ label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Lista de tarefas -->
+  {% if tarefas %}
+    {% for t in tarefas %}
+
+    {% set vencida = t.prazo and t.prazo < today and t.status != "concluida" %}
+    {% set vence_hoje = t.prazo and t.prazo == today and t.status != "concluida" %}
+
+    <div class="card mb-3 p-3 {% if t.status == 'concluida' %}opacity-75{% endif %}"
+         style="{% if vencida %}border-left: 4px solid #e74c3c;{% elif vence_hoje %}border-left: 4px solid #f39c12;{% endif %}">
+      <div class="d-flex justify-content-between align-items-start gap-3">
+
+        <!-- Info da tarefa -->
+        <div class="flex-grow-1">
+          <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+            <h6 class="mb-0 fw-semibold {% if t.status == 'concluida' %}text-decoration-line-through text-muted{% endif %}" style="color: #1a1a2e;">
+              {{ t.titulo }}
+            </h6>
+
+            <!-- Badge prioridade -->
+            {% if t.prioridade == "alta" %}
+              <span class="badge" style="background-color: #e74c3c;">Alta</span>
+            {% elif t.prioridade == "media" %}
+              <span class="badge" style="background-color: #f39c12;">Média</span>
+            {% else %}
+              <span class="badge" style="background-color: #95a5a6;">Baixa</span>
+            {% endif %}
+
+            <!-- Badge status -->
+            {% if t.status == "pendente" %}
+              <span class="badge bg-light text-muted border">Pendente</span>
+            {% elif t.status == "em_andamento" %}
+              <span class="badge" style="background-color: #3498db;">Em andamento</span>
+            {% else %}
+              <span class="badge" style="background-color: #00d4aa; color: #1a1a2e;">Concluída</span>
+            {% endif %}
+
+            <!-- Badge categoria -->
+            {% if t.categoria != "geral" %}
+              <span class="badge bg-light text-muted border">{{ t.categoria | capitalize }}</span>
+            {% endif %}
+          </div>
+
+          {% if t.descricao %}
+          <p class="text-muted small mb-1">{{ t.descricao }}</p>
+          {% endif %}
+
+          <!-- Prazo com alerta -->
+          {% if t.prazo %}
+            {% if vencida %}
+              <small class="text-danger fw-semibold">
+                <i class="bi bi-exclamation-circle me-1"></i>Vencida em {{ t.prazo.strftime('%d/%m/%Y') }}
+              </small>
+            {% elif vence_hoje %}
+              <small class="text-warning fw-semibold">
+                <i class="bi bi-clock me-1"></i>Vence hoje!
+              </small>
+            {% else %}
+              <small class="text-muted">
+                <i class="bi bi-calendar3 me-1"></i>{{ t.prazo.strftime('%d/%m/%Y') }}
+              </small>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <!-- Ações -->
+        <div class="d-flex gap-2 flex-shrink-0">
+
+          <!-- Editar -->
+          <a href="{{ url_for('editar_tarefa', id=t.id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
+            <i class="bi bi-pencil"></i>
+          </a>
+
+          <!-- Mudar status -->
+          <form method="POST" action="{{ url_for('atualizar_status', id=t.id) }}">
+            {% if t.status == "pendente" %}
+              <button type="submit" name="status" value="em_andamento" class="btn btn-sm btn-outline-primary" title="Iniciar">
+                <i class="bi bi-play-fill"></i>
+              </button>
+            {% elif t.status == "em_andamento" %}
+              <button type="submit" name="status" value="concluida" class="btn btn-sm btn-outline-success" title="Concluir">
+                <i class="bi bi-check-lg"></i>
+              </button>
+            {% else %}
+              <button type="submit" name="status" value="pendente" class="btn btn-sm btn-outline-secondary" title="Reabrir">
+                <i class="bi bi-arrow-counterclockwise"></i>
+              </button>
+            {% endif %}
+          </form>
+
+          <!-- Deletar -->
+          <form method="POST" action="{{ url_for('deletar_tarefa', id=t.id) }}"
+                onsubmit="return confirm('Deletar essa tarefa?')">
+            <button type="submit" class="btn btn-sm btn-outline-danger" title="Deletar">
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  {% else %}
+  <!-- Estado vazio -->
+  <div class="text-center py-5">
+    <i class="bi bi-inbox fs-1 text-muted"></i>
+    <p class="text-muted mt-2">Nenhuma tarefa encontrada.</p>
+    <a href="{{ url_for('nova_tarefa') }}" class="btn btn-primary mt-1">
+      <i class="bi bi-plus-circle me-1"></i> Criar primeira tarefa
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
